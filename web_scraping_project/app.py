@@ -67,7 +67,6 @@ def index():
         app.logger.error(f"Error al obtener citas: {str(e)}")
         return "Ha ocurrido un error al cargar las citas.", 500
     finally:
-        app.logger.info("Cerrando la sesión de la base de datos.")
         Session.remove()
 
 @app.errorhandler(404)
