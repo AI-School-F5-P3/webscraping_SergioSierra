@@ -4,15 +4,13 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 from dotenv import load_dotenv
+from web_scraping_project.models import Base
 
 # Añadir el directorio del proyecto al PYTHONPATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
-
-# Importar el modelo para que Alembic lo conozca
-from web_scraping_project.models import Base  # Ajusta el import según tu estructura
 
 # Alembic Config object
 config = context.config
@@ -40,12 +38,11 @@ target_metadata = Base.metadata
 def run_migrations_offline():
     """Ejecutar migraciones en modo 'offline'."""
     context.configure(
-        url=config.get_main_option("sqlalchemy.url"),
+        url=db_url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
     )
-
     with context.begin_transaction():
         context.run_migrations()
 
@@ -56,10 +53,11 @@ def run_migrations_online():
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
-
     with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
-
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+        )
         with context.begin_transaction():
             context.run_migrations()
 

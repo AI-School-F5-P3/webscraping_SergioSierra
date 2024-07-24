@@ -6,3 +6,4 @@ flask
 sqlalchemy
 dotenv
 alembic
+tenacity

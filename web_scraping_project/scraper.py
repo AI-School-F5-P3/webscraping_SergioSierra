@@ -1,11 +1,13 @@
 import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import requests
 from bs4 import BeautifulSoup
 import logging
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
-from .models import Quote, Base
+from web_scraping_project.models import Quote, Base
 from dotenv import load_dotenv
 from tenacity import retry, stop_after_attempt, wait_exponential
 
