@@ -1,30 +1,44 @@
+import sys
 import os
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 from dotenv import load_dotenv
 
+# Añadir el directorio del proyecto al PYTHONPATH
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
 
-# Importa el modelo para que Alembic lo conozca
-from web_scraping_project.models import Base
+# Importar el modelo para que Alembic lo conozca
+from web_scraping_project.models import Base  # Ajusta el import según tu estructura
 
 # Alembic Config object
 config = context.config
 
-# Set the database URL dynamically
+# Verificar que todas las variables de entorno necesarias estén presentes
+required_env_vars = ['DB_USER', 'DB_PASSWORD', 'DB_HOST', 'DB_PORT', 'DB_NAME']
+for var in required_env_vars:
+    if not os.getenv(var):
+        raise ValueError(f"La variable de entorno {var} no está definida")
+
+# Configurar la URL de la base de datos dinámicamente
 db_url = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
 config.set_main_option('sqlalchemy.url', db_url)
 
-# Interpret the config file for Python logging.
-fileConfig(config.config_file_name)
+# Imprimir la URL de la base de datos para depuración
+print(f"Base de datos URL: {db_url}")
 
-# MetaData object for 'autogenerate' support
+# Interpretar el archivo de configuración para el logging
+if config.config_file_name is not None:
+    fileConfig(os.path.join(os.path.dirname(__file__), 'logging.conf'))
+
+# MetaData object para soporte de 'autogenerate'
 target_metadata = Base.metadata
 
 def run_migrations_offline():
-    """Run migrations in 'offline' mode."""
+    """Ejecutar migraciones en modo 'offline'."""
     context.configure(
         url=config.get_main_option("sqlalchemy.url"),
         target_metadata=target_metadata,
@@ -36,7 +50,7 @@ def run_migrations_offline():
         context.run_migrations()
 
 def run_migrations_online():
-    """Run migrations in 'online' mode."""
+    """Ejecutar migraciones en modo 'online'."""
     connectable = engine_from_config(
         config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",

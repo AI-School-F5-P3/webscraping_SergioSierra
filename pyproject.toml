@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "webscraping_sergio_sierra"
+name = "webscraping_sergiosierra"
 version = "0.1.0"
 description = "Proyecto de web scraping con PostgreSQL"
 authors = ["Sergio Sierra <tu_email@example.com>"]

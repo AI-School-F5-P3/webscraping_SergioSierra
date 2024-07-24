@@ -1,17 +1,53 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <title>Quotes</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citas Inspiradoras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .quote {
+            background-color: #f9f9f9;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .quote-text {
+            font-style: italic;
+            font-size: 1.1em;
+        }
+        .quote-author {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 10px;
+        }
+        .quote-tags {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
-    <h1>Quotes</h1>
-    {% for quote in quotes %}
-        <div>
-            <p>{{ quote.quote }}</p>
-            <p><strong>{{ quote.author }}</strong></p>
-            <p>{{ quote.tags }}</p>
-        </div>
-        <hr>
-    {% endfor %}
+    <h1>Citas Inspiradoras</h1>
+    <main>
+        {% for quote in quotes %}
+            <article class="quote">
+                <p class="quote-text">"{{ quote.quote }}"</p>
+                <p class="quote-author">— {{ quote.author }}</p>
+                <p class="quote-tags">Tags: {{ quote.tags }}</p>
+            </article>
+        {% endfor %}
+    </main>
 </body>
 </html>
