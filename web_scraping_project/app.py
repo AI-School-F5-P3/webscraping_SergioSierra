@@ -12,7 +12,7 @@ load_dotenv()
 
 # Configuración de logging
 try:
-    logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
+    logging.config.fileConfig('web_scraping_project/logging.conf', disable_existing_loggers=False)
 except FileNotFoundError:
     print("El archivo de configuración de logging 'logging.conf' no se encuentra.")
 except Exception as e:
@@ -37,6 +37,7 @@ def index():
 
     try:
         with Session() as session:
+            app.logger.info(f"Buscando citas. Página: {page}, Búsqueda: '{search}'")
             # Filtrar citas según el término de búsqueda
             query = session.query(Quote)
             if search:
@@ -53,6 +54,7 @@ def index():
             total_quotes = query.count()
             total_pages = (total_quotes + PAGE_SIZE - 1) // PAGE_SIZE
 
+            app.logger.info(f"Se encontraron {total_quotes} citas. Total páginas: {total_pages}")
             return render_template(
                 'index.html', 
                 quotes=quotes, 
@@ -65,15 +67,19 @@ def index():
         app.logger.error(f"Error al obtener citas: {str(e)}")
         return "Ha ocurrido un error al cargar las citas.", 500
     finally:
+        app.logger.info("Cerrando la sesión de la base de datos.")
         Session.remove()
 
 @app.errorhandler(404)
 def page_not_found(e):
+    app.logger.warning("Página no encontrada: 404")
     return render_template('index.html', quotes=[], page=1, page_size=PAGE_SIZE, total_pages=1), 404
 
 @app.errorhandler(500)
 def internal_server_error(e):
+    app.logger.error("Error interno del servidor: 500")
     return render_template('index.html', quotes=[], page=1, page_size=PAGE_SIZE, total_pages=1), 500
 
 if __name__ == '__main__':
+    app.logger.info("Iniciando la aplicación Flask.")
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)), debug=True)
