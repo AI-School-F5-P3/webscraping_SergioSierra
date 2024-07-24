@@ -3,7 +3,7 @@ from flask import Flask, render_template
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from dotenv import load_dotenv
-from .models import Quote
+from web_scraping_project.models import Quote
 
 # Cargar variables de entorno
 load_dotenv()
