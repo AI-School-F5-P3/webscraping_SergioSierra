@@ -36,10 +36,45 @@
             color: #7f8c8d;
             font-size: 0.9em;
         }
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            text-decoration: none;
+            color: #3498db;
+            margin: 0 10px;
+        }
+        .search-form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .search-form input[type="text"] {
+            padding: 8px;
+            width: 60%;
+            max-width: 500px;
+        }
+        .search-form input[type="submit"] {
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <h1>FraSearch</h1>
+    <header>
+        <h1>FraSearch</h1>
+    </header>
+    
+    <div class="search-form">
+        <form action="/" method="get">
+            <input type="text" name="search" placeholder="Buscar citas...">
+            <input type="submit" value="Buscar">
+        </form>
+    </div>
+    
     <main>
         {% for quote in quotes %}
             <article class="quote">
@@ -49,5 +84,19 @@
             </article>
         {% endfor %}
     </main>
+
+    <div class="pagination">
+        {% if page > 1 %}
+            <a href="?page={{ page - 1 }}{% if search %}&search={{ search }}{% endif %}">&laquo; Página Anterior</a>
+        {% endif %}
+        <span>Página {{ page }}</span>
+        {% if quotes|length == page_size %}
+            <a href="?page={{ page + 1 }}{% if search %}&search={{ search }}{% endif %}">Página Siguiente &raquo;</a>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>&copy; 2024 FraSearch. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>
