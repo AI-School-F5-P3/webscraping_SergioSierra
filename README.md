@@ -47,10 +47,6 @@ webscraping_SergioSierra/
 │   ├── __init__.py           # Inicializa el paquete de pruebas.
 │   ├── test_scraper.py       # Pruebas para el scraper.
 │   └── test_app.py           # Pruebas para la aplicación Flask.
-├── alembic/                  # Configuración de Alembic para migraciones.
-│   ├── env.py
-│   └── versions/             # Migraciones de base de datos.
-├── alembic.ini               # Archivo de configuración de Alembic.
 ├── Dockerfile                # Dockerfile para construir la imagen del proyecto.
 ├── docker-compose.yml        # Configuración de Docker Compose.
 └── .env.example              # Archivo de ejemplo para variables de entorno.
@@ -65,7 +61,6 @@ webscraping_SergioSierra/
 - **Flask**: Microframework para el frontend.
 - **PostgreSQL**: Sistema de gestión de bases de datos.
 - **Docker**: Para la contenedorización y despliegue.
-- **Alembic**: Para la gestión de migraciones de base de datos.
 - **pytest**: Para la realización de pruebas unitarias.
 
 ## Configuración
