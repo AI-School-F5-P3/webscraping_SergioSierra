@@ -19,7 +19,7 @@ from web_scraping_project.models import Quote, Base
 # Cargar variables de entorno
 load_dotenv()
 
-db_url = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@db:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+db_url = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
 
 engine = create_engine(db_url)
 session_factory = sessionmaker(bind=engine)
@@ -56,23 +56,23 @@ class QuoteScraper:
 
     def parse_quote(self, quote_div):
         text = quote_div.find('span', class_='text').get_text(strip=True)
-        author = quote_div.find('small', class_='author').get_text(strip=True)
+        author_name = quote_div.find('small', class_='author').get_text(strip=True)
         tags = [tag.get_text(strip=True) for tag in quote_div.find_all('a', class_='tag')]
-        logger.debug(f"Quote parsed: texto={text}, autor={author}, etiquetas={tags}")
-        return Quote(quote=text, author=author, tags=','.join(tags))
+        logger.debug(f"Quote parsed: texto={text}, autor={author_name}, etiquetas={tags}")
+        return text, author_name, ','.join(tags)
     
-    def get_author_bio(self, url):
-        full_url = f"https://quotes.toscrape.com{url}"
-        logger.info(f"Obteniendo biografía del autor desde: {full_url}")
+    def get_author_bio(self, author_url):
+        author_url = f"http://quotes.toscrape.com{author_url}"
         try:
-            response = requests.get(full_url)
-            response.raise_for_status()
-            soup = BeautifulSoup(response.text, 'html.parser')
+            html = self.get_page(author_url)
+            soup = BeautifulSoup(html, 'html.parser')
             bio = soup.find('div', class_='author-description').get_text(strip=True)
+            logger.info(f"Biografía obtenida exitosamente para {author_url}: {bio[:100]}...")  # Log de éxito con un fragmento de la biografía
             return bio
-        except requests.RequestException as e:
-            logger.error(f"Error al obtener la biografía del autor desde {full_url}: {e}")
-            return "No disponible"
+        except Exception as e:
+            logger.error(f"Error al obtener la biografía del autor en {author_url}: {e}")
+            return ""
+
 
     def get_quotes_from_page(self, url):
         try:
@@ -83,9 +83,17 @@ class QuoteScraper:
 
             with self.Session() as session:
                 for quote_div in quotes:
-                    new_quote = self.parse_quote(quote_div)
+                    text, author_name, tags = self.parse_quote(quote_div)
+                    
+                    # Obtener la URL del autor
+                    author_url = quote_div.find('small', class_='author').find_next('a')['href']
+                    bio = self.get_author_bio(author_url)
+
+                    # Crear la cita con la biografía del autor
+                    new_quote = Quote(quote=text, author=author_name, tags=tags, author_bio=bio)
                     session.add(new_quote)
-                    logger.info(f"Cita insertada: {new_quote.quote[:30]}...")
+                    logger.info(f"Cita insertada: {text[:30]}...")
+
                 session.commit()
                 logger.info("Transacción completada y cambios guardados en la base de datos.")
         except requests.RequestException as e:

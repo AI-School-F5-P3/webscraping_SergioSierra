@@ -1,0 +1,19 @@
+# Dockerfile for scraper.py
+FROM python:3.9-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the requirements file and install dependencies
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the application code
+COPY web_scraping_project /app/web_scraping_project
+COPY . /app
+
+# Set environment variables
+ENV PYTHONPATH=/app/web_scraping_project
+
+# Command to run the scraper script
+CMD ["python", "web_scraping_project/scraper.py"]

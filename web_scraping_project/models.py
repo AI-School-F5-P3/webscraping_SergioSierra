@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy import Column, Integer, String, create_engine, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
@@ -16,7 +16,7 @@ class Quote(Base):
     quote = Column(String, nullable=False)
     author = Column(String, nullable=False)
     tags = Column(String)
-    author_bio = Column(String)  # Nuevo campo para la biografía del autor
+    author_bio = Column(Text)  # Nuevo campo para la biografía del autor
 
     def __repr__(self):
         return f"<Quote(id={self.id}, quote={self.quote[:20]}, author={self.author})>"

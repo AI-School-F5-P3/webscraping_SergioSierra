@@ -64,3 +64,13 @@ h1 {
     border: none;
     cursor: pointer;
 }
+
+.toggle-bio {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8em;
+}
