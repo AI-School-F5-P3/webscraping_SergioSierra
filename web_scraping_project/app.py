@@ -1,11 +1,10 @@
-import os
-import sys
-import logging.config
 from flask import Flask, render_template, request
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker, scoped_session
 from dotenv import load_dotenv
 from web_scraping_project.models import Quote
+import os
+import logging.config
 
 # Cargar variables de entorno
 load_dotenv()
@@ -56,11 +55,11 @@ def index():
 
             app.logger.info(f"Se encontraron {total_quotes} citas. Total páginas: {total_pages}")
             return render_template(
-                'index.html', 
-                quotes=quotes, 
-                page=page, 
-                page_size=PAGE_SIZE, 
-                total_pages=total_pages, 
+                'index.html',
+                quotes=quotes,
+                page=page,
+                page_size=PAGE_SIZE,
+                total_pages=total_pages,
                 search=search
             )
     except Exception as e:
@@ -82,3 +81,4 @@ def internal_server_error(e):
 if __name__ == '__main__':
     app.logger.info("Iniciando la aplicación Flask.")
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)), debug=True)
+

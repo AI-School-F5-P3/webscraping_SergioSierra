@@ -13,7 +13,7 @@
     
     <div class="search-form">
         <form action="/" method="get">
-            <input type="text" name="search" placeholder="Buscar citas...">
+            <input type="text" name="search" placeholder="Buscar citas..." value="{{ search }}">
             <input type="submit" value="Buscar">
         </form>
     </div>
@@ -24,6 +24,9 @@
                 <p class="quote-text">"{{ quote.quote }}"</p>
                 <p class="quote-author">— {{ quote.author }}</p>
                 <p class="quote-tags">Tags: {{ quote.tags }}</p>
+                {% if quote.author_bio %}
+                    <p class="quote-author-bio">{{ quote.author_bio }}</p>
+                {% endif %}
             </article>
         {% endfor %}
     </main>

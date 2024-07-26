@@ -11,14 +11,15 @@ Base = declarative_base()
 
 class Quote(Base):
     __tablename__ = 'quotes'
-    
+
     id = Column(Integer, primary_key=True)
-    quote = Column(String(1000), nullable=False)  # Limitar longitud de la cita
-    author = Column(String(100), nullable=False)  # Limitar longitud del autor
-    tags = Column(String(200))  # Limitar longitud de las etiquetas
-    
+    quote = Column(String, nullable=False)
+    author = Column(String, nullable=False)
+    tags = Column(String)
+    author_bio = Column(String)  # Nuevo campo para la biografía del autor
+
     def __repr__(self):
-        return f"<Quote(id={self.id}, author='{self.author}', quote='{self.quote[:30]}...')>"
+        return f"<Quote(id={self.id}, quote={self.quote[:20]}, author={self.author})>"
 
 # Configuración de la base de datos
 DB_URL = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"

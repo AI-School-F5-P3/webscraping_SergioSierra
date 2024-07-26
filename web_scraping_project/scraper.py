@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import logging
 from logging.config import fileConfig
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.exc import SQLAlchemyError
 from dotenv import load_dotenv
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -18,6 +18,12 @@ from web_scraping_project.models import Quote, Base
 
 # Cargar variables de entorno
 load_dotenv()
+
+db_url = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@db:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+
+engine = create_engine(db_url)
+session_factory = sessionmaker(bind=engine)
+Session = scoped_session(session_factory)
 
 # Configuración de logging
 try:
@@ -54,6 +60,19 @@ class QuoteScraper:
         tags = [tag.get_text(strip=True) for tag in quote_div.find_all('a', class_='tag')]
         logger.debug(f"Quote parsed: texto={text}, autor={author}, etiquetas={tags}")
         return Quote(quote=text, author=author, tags=','.join(tags))
+    
+    def get_author_bio(self, url):
+        full_url = f"https://quotes.toscrape.com{url}"
+        logger.info(f"Obteniendo biografía del autor desde: {full_url}")
+        try:
+            response = requests.get(full_url)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.text, 'html.parser')
+            bio = soup.find('div', class_='author-description').get_text(strip=True)
+            return bio
+        except requests.RequestException as e:
+            logger.error(f"Error al obtener la biografía del autor desde {full_url}: {e}")
+            return "No disponible"
 
     def get_quotes_from_page(self, url):
         try:
