@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker, scoped_session
 from dotenv import load_dotenv
@@ -62,11 +62,19 @@ def index():
                 total_pages=total_pages,
                 search=search
             )
+            
     except Exception as e:
         app.logger.error(f"Error al obtener citas: {str(e)}")
         return "Ha ocurrido un error al cargar las citas.", 500
     finally:
         Session.remove()
+
+@app.route('/log_bio_view', methods=['POST'])
+def log_bio_view():
+    data = request.get_json()
+    author = data.get('author')
+    app.logger.info(f"Biografía de {author} vista.")
+    return jsonify({"status": "success", "message": f"Biografía de {author} vista."})
 
 @app.errorhandler(404)
 def page_not_found(e):
