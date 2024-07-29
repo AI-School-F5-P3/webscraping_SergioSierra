@@ -43,16 +43,20 @@ class QuoteScraper:
         logger.debug(f"URL de la base de datos: {db_url}")
         self.engine = create_engine(db_url)
         Base.metadata.create_all(self.engine)
-        self.Session = sessionmaker(bind=self.engine)
+        self.Session = sessionmaker(bind=self.engine)  # Esto crea la sesión
         logger.info("Conexión a la base de datos establecida y tablas creadas (si no existían).")
     
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     def get_page(self, url):
-        logger.info(f"Intentando obtener la página: {url}")
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        logger.info(f"Página obtenida exitosamente: {url}")
-        return response.text
+        try:
+            logger.info(f"Intentando obtener la página: {url}")
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            logger.info(f"Página obtenida exitosamente: {url}")
+            return response.text
+        except requests.RequestException as e:
+            logger.error(f"Error al obtener la página {url}: {e}")
+            raise
 
     def parse_quote(self, quote_div):
         text = quote_div.find('span', class_='text').get_text(strip=True)
@@ -102,6 +106,7 @@ class QuoteScraper:
             logger.error(f"Error de base de datos al procesar la página {url}: {e}")
         except Exception as e:
             logger.error(f"Error inesperado al analizar la página {url}: {e}")
+            raise
 
     def scrape_quotes(self):
         base_url = 'http://quotes.toscrape.com/page/'
