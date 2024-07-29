@@ -20,19 +20,19 @@ Este proyecto realiza web scraping para extraer citas de la web [Quotes to Scrap
 
 ## Descripción del Proyecto
 
-Este proyecto es una aplicación de web scraping que extrae citas de la web `Quotes to Scrape`. Utiliza `BeautifulSoup` para el scraping, `SQLAlchemy` para la gestión de la base de datos y `Flask` para el frontend. Los datos extraídos se almacenan en una base de datos PostgreSQL y la aplicación está dockerizada para facilitar su despliegue.
+Este proyecto es una aplicación de web scraping que extrae citas de la web `Quotes to Scrape`. Utiliza `BeautifulSoup` para el scraping, `SQLAlchemy` para la gestión de la base de datos y `Flask` para el frontend. Los datos extraídos se almacenan en una base de datos PostgreSQL.
 
 ## Características
 
-- Extracción de citas, autores y tags desde la web.
+- Extracción de citas, autores, biografías y tags desde la web.
 - Almacenamiento de datos en una base de datos PostgreSQL.
 - Frontend básico para visualizar las citas.
-- Dockerización para un entorno de ejecución consistente.
+- Programación de tareas de scraping automatizadas.
 - Gestión de errores robusta y pruebas unitarias.
 
 ## Estructura del Proyecto
 
-```plaintext
+```
 webscraping_SergioSierra/
 ├── pyproject.toml            # Configuración del proyecto y dependencias.
 ├── README.md                 # Este archivo.
@@ -41,14 +41,14 @@ webscraping_SergioSierra/
 │   ├── scraper.py            # Script principal de web scraping.
 │   ├── app.py                # Aplicación Flask para el frontend.
 │   ├── models.py             # Modelos de datos para SQLAlchemy.
-│   └── templates/            # Plantillas HTML para el frontend.
-│       └── index.html
+│   ├── templates/            # Plantillas HTML para el frontend.
+│   │   └── index.html
+│   └── static
+│        ├── scripts.js       # Scripts JavaScript.
+│        └── styles.css       # Estilos CSS.
 ├── tests/                    # Pruebas unitarias.
 │   ├── __init__.py           # Inicializa el paquete de pruebas.
-│   ├── test_scraper.py       # Pruebas para el scraper.
-│   └── test_app.py           # Pruebas para la aplicación Flask.
-├── Dockerfile                # Dockerfile para construir la imagen del proyecto.
-├── docker-compose.yml        # Configuración de Docker Compose.
+│   └── test_scraper.py       # Pruebas para el scraper.   
 └── .env.example              # Archivo de ejemplo para variables de entorno.
 ```
 
@@ -60,7 +60,6 @@ webscraping_SergioSierra/
 - **SQLAlchemy**: ORM para interactuar con PostgreSQL.
 - **Flask**: Microframework para el frontend.
 - **PostgreSQL**: Sistema de gestión de bases de datos.
-- **Docker**: Para la contenedorización y despliegue.
 - **pytest**: Para la realización de pruebas unitarias.
 
 ## Configuración
@@ -77,15 +76,7 @@ webscraping_SergioSierra/
    Instala las dependencias con Poetry:
 
    ```bash
-   poetry install
-   ```
-
-2. **Configuración de Docker**
-
-   Copia el archivo `.env.example` a `.env` y ajusta las variables según tu configuración:
-
-   ```bash
-   cp .env.example .env
+   requirements install
    ```
 
    **Ejemplo `.env`**:
@@ -95,43 +86,30 @@ webscraping_SergioSierra/
 
 ## Uso
 
-1. **Iniciar el Proyecto con Docker**
+   Scraping
+   Para iniciar el scraping de las citas:
 
-   Construye y levanta los contenedores:
+   python scraper.py
+   El script obtendrá citas de Quotes to Scrape y las almacenará en la base de datos configurada.
 
-   ```bash
-   docker-compose up --build
-   ```
+   Para iniciar la aplicación web:
 
-   La aplicación estará disponible en [http://localhost:5000](http://localhost:5000).
 
-2. **Ejecutar el Scraper**
-
-   Puedes ejecutar el scraper manualmente dentro del contenedor si deseas realizar scraping en cualquier momento:
-
-   ```bash
-   docker-compose run web python web_scraping_project/scraper.py
-   ```
+   python web_scraping_project/app.py
 
 ## Pruebas
 
-Para ejecutar las pruebas unitarias:
+   Para ejecutar las pruebas unitarias:
 
-```bash
-poetry run pytest
-```
-
-## Despliegue
-
-Para desplegar en un servidor:
-
-1. **Configura tu servidor** (DigitalOcean, AWS, etc.).
-2. **Instala Docker y Docker Compose** en el servidor.
-3. **Sube el código al servidor** y ejecuta:
-
-   ```bash
-   docker-compose up --build
+   pytest
    ```
+
+   ## Despliegue
+
+   Para desplegar la aplicación:
+
+   python -m web_scraping_project.app
+```
 
 ## Contribución
 
