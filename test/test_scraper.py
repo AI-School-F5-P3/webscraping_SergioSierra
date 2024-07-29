@@ -76,8 +76,8 @@ class TestQuoteScraper(unittest.TestCase):
             self.assertEqual(args[0].quote, "Test quote")
             self.assertEqual(args[0].author, "Author Name")
             self.assertEqual(args[0].tags, ["tag1", "tag2"])
-            self.assertEqual(args[0].bio, "Author bio")  # Assuming bio is stored in the Quote object
-
+            self.assertEqual(args[0].bio, "Author bio")  
+            
         # Verify session.commit call
         self.assertEqual(mock_session.commit.call_count, 1, "session.commit was not called once")
 
