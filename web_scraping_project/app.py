@@ -37,22 +37,26 @@ def index():
     search = request.args.get('search', '', type=str)  # Obtiene el término de búsqueda de los argumentos de la solicitud
     author = request.args.get('author', '', type=str)  # Obtiene el autor de los argumentos de la solicitud
     tag = request.args.get('tag', '', type=str)  # Obtiene la etiqueta de los argumentos de la solicitud
+    offset = (page - 1) * PAGE_SIZE  # Calcula el offset para la paginación
 
     try:
         with Session() as session:
             app.logger.info(f"Buscando citas. Página: {page}, Búsqueda: '{search}', Autor: '{author}', Etiqueta: '{tag}'")
 
-            if search:
-                quotes = search_quotes(session, search)  # Busca citas que contengan el término de búsqueda
-            elif author:
-                quotes = filter_by_author(session, author)  # Filtra citas por autor
-            elif tag:
-                quotes = filter_by_tag(session, tag)  # Filtra citas por etiqueta
-            else:
-                quotes = get_paginated_quotes(session, page, PAGE_SIZE)  # Obtiene citas paginadas
+            # Construir la consulta
+            query = session.query(Quote)
 
-            total_quotes = len(quotes)
-            total_pages = (total_quotes + PAGE_SIZE - 1) // PAGE_SIZE
+            if search:
+                query = query.filter(Quote.quote.ilike(f'%{search}%'))
+            if author:
+                query = query.filter(Quote.author.ilike(f'%{author}%'))
+            if tag:
+                query = query.filter(Quote.tags.ilike(f'%{tag}%'))
+
+            # Aplicar la paginación
+            quotes = query.order_by(Quote.id).offset(offset).limit(PAGE_SIZE).all()
+            total_quotes = query.count()  # Contar el total de citas para la paginación
+            total_pages = (total_quotes + PAGE_SIZE - 1) // PAGE_SIZE  # Calcular el número total de páginas
 
             app.logger.info(f"Se encontraron {total_quotes} citas. Total páginas: {total_pages}")
             return render_template(
@@ -71,6 +75,7 @@ def index():
         return "Ha ocurrido un error al cargar las citas.", 500
     finally:
         Session.remove()
+
 
 @app.route('/log_bio_view', methods=['POST'])
 def log_bio_view():

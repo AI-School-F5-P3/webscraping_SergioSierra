@@ -15,6 +15,8 @@
     <div class="search-form">
         <form action="/" method="get">
             <input type="text" name="search" placeholder="Buscar citas..." value="{{ search }}">
+            <input type="text" name="author" placeholder="Buscar por autor..." value="{{ author }}">
+            <input type="text" name="tag" placeholder="Buscar por etiqueta..." value="{{ tag }}">
             <input type="submit" value="Buscar">
         </form>
     </div>
@@ -39,16 +41,16 @@
 
     <div class="pagination">
         {% if page > 1 %}
-            <a href="?page={{ page - 1 }}{% if search %}&search={{ search }}{% endif %}">&laquo; Página Anterior</a>
+            <a href="?page={{ page - 1 }}{% if search %}&search={{ search }}{% endif %}{% if author %}&author={{ author }}{% endif %}{% if tag %}&tag={{ tag }}{% endif %}">&laquo; Página Anterior</a>
         {% endif %}
         <span>Página {{ page }}</span>
         {% if quotes|length == page_size %}
-            <a href="?page={{ page + 1 }}{% if search %}&search={{ search }}{% endif %}">Página Siguiente &raquo;</a>
+            <a href="?page={{ page + 1 }}{% if search %}&search={{ search }}{% endif %}{% if author %}&author={{ author }}{% endif %}{% if tag %}&tag={{ tag }}{% endif %}">Página Siguiente &raquo;</a>
         {% endif %}
     </div>
 
     <footer>
-        <p>&copy; 2024 FraSearch. Todos los derechos reservados.</p>
+        <p>&copy; 2024 FraSearch. XYZ. Factoría F5. Todos los derechos reservados.</p>
     </footer>
 </body>
 </html>
