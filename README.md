@@ -87,22 +87,21 @@ webscraping_SergioSierra/
 
    Scraping
    Para iniciar el scraping de las citas:
-
+   ```
    python scraper.py
-   
+   ```
    El script obtendrá citas de Quotes to Scrape y las almacenará en la base de datos configurada.
 
    Para iniciar la aplicación web:
 
-
+   ```
    python web_scraping_project/app.py
-
+   ```
 ## Pruebas
 
    Para ejecutar las pruebas unitarias:
-
-   pytest
    ```
+   pytest
    ```
 ## Despliegue
 
