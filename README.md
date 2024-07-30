@@ -32,15 +32,15 @@ Este proyecto es una aplicación de web scraping que extrae citas de la web `Quo
 
 ```
 webscraping_SergioSierra/
-├── pyproject.toml            # Configuración del proyecto y dependencias.
-├── README.md                 # Este archivo.
+├── requirements.txt          # Dependencias.
+├── README.md                 
 ├── web_scraping_project/     # Código fuente del proyecto.
 │   ├── __init__.py           # Inicializa el paquete.
 │   ├── scraper.py            # Script principal de web scraping.
 │   ├── app.py                # Aplicación Flask para el frontend.
 │   ├── models.py             # Modelos de datos para SQLAlchemy.
 │   ├── templates/            # Plantillas HTML para el frontend.
-│   │   └── index.html
+│   │   └── index.html        # Estructura básica de la web.
 │   └── static
 │        ├── scripts.js       # Scripts JavaScript.
 │        └── styles.css       # Estilos CSS.
