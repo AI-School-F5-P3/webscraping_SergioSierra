@@ -2282,3 +2282,8 @@ FROM quotes ORDER BY quotes.id
 2024-07-30 09:33:18 - app - INFO - Iniciando la aplicación Flask.
 2024-07-30 09:33:19 - werkzeug - WARNING -  * Debugger is active!
 2024-07-30 09:33:19 - werkzeug - INFO -  * Debugger PIN: 843-679-884
+2024-07-30 09:33:49 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Administrator\\Desktop\\F5\\webscraping_SergioSierra\\web_scraping_project\\pagination.py', reloading
+2024-07-30 09:33:50 - werkzeug - INFO -  * Restarting with stat
+2024-07-30 09:33:51 - app - INFO - Iniciando la aplicación Flask.
+2024-07-30 09:33:51 - werkzeug - WARNING -  * Debugger is active!
+2024-07-30 09:33:51 - werkzeug - INFO -  * Debugger PIN: 843-679-884

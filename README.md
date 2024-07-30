@@ -16,7 +16,6 @@ Este proyecto realiza web scraping para extraer citas de la web [Quotes to Scrap
 - [Pruebas](#pruebas)
 - [Despliegue](#despliegue)
 - [Contribución](#contribución)
-- [Licencia](#licencia)
 
 ## Descripción del Proyecto
 
