@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 from web_scraping_project.models import Quote
 import os
 import logging.config
+from web_scraping_project.filters import filter_by_author, filter_by_tag
+from web_scraping_project.search import search_quotes  # Importa la función de búsqueda
+from web_scraping_project.pagination import get_paginated_quotes
 
 # Cargar variables de entorno
 load_dotenv()
@@ -30,27 +33,25 @@ PAGE_SIZE = 10
 
 @app.route('/')
 def index():
-    page = request.args.get('page', 1, type=int)
-    search = request.args.get('search', '', type=str)
-    offset = (page - 1) * PAGE_SIZE
+    page = request.args.get('page', 1, type=int)  # Obtiene el número de página de los argumentos de la solicitud
+    search = request.args.get('search', '', type=str)  # Obtiene el término de búsqueda de los argumentos de la solicitud
+    author = request.args.get('author', '', type=str)  # Obtiene el autor de los argumentos de la solicitud
+    tag = request.args.get('tag', '', type=str)  # Obtiene la etiqueta de los argumentos de la solicitud
 
     try:
         with Session() as session:
-            app.logger.info(f"Buscando citas. Página: {page}, Búsqueda: '{search}'")
-            # Filtrar citas según el término de búsqueda
-            query = session.query(Quote)
-            if search:
-                search_term = f"%{search}%"
-                query = query.filter(
-                    or_(
-                        Quote.quote.ilike(search_term),
-                        Quote.author.ilike(search_term),
-                        Quote.tags.ilike(search_term)
-                    )
-                )
+            app.logger.info(f"Buscando citas. Página: {page}, Búsqueda: '{search}', Autor: '{author}', Etiqueta: '{tag}'")
 
-            quotes = query.order_by(Quote.id).offset(offset).limit(PAGE_SIZE).all()
-            total_quotes = query.count()
+            if search:
+                quotes = search_quotes(session, search)  # Busca citas que contengan el término de búsqueda
+            elif author:
+                quotes = filter_by_author(session, author)  # Filtra citas por autor
+            elif tag:
+                quotes = filter_by_tag(session, tag)  # Filtra citas por etiqueta
+            else:
+                quotes = get_paginated_quotes(session, page, PAGE_SIZE)  # Obtiene citas paginadas
+
+            total_quotes = len(quotes)
             total_pages = (total_quotes + PAGE_SIZE - 1) // PAGE_SIZE
 
             app.logger.info(f"Se encontraron {total_quotes} citas. Total páginas: {total_pages}")
@@ -60,7 +61,9 @@ def index():
                 page=page,
                 page_size=PAGE_SIZE,
                 total_pages=total_pages,
-                search=search
+                search=search,
+                author=author,
+                tag=tag
             )
             
     except Exception as e:
@@ -89,4 +92,3 @@ def internal_server_error(e):
 if __name__ == '__main__':
     app.logger.info("Iniciando la aplicación Flask.")
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)), debug=True)
-

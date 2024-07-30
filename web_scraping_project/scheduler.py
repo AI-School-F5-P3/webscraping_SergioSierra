@@ -2,7 +2,7 @@ import schedule
 import time
 import logging
 import logging.config
-from web_scraping_project.scraper import QuoteScraper  # Asegúrate de que este sea el import correcto
+from web_scraping_project.scraper import QuoteScraper  
 
 # Cargar la configuración de logging desde logging.conf
 try:

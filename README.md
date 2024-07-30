@@ -115,8 +115,4 @@ webscraping_SergioSierra/
 
 Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request en GitHub para discutir cualquier cambio.
 
-## Licencia
 
-Este proyecto está licenciado bajo la [MIT License](LICENSE).
-
----
