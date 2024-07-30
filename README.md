@@ -103,14 +103,14 @@ webscraping_SergioSierra/
 
    pytest
    ```
-
-   ## Despliegue
+   ```
+## Despliegue
 
    Para desplegar la aplicación:
 
    python -m web_scraping_project.app
 ```
-
+```
 ## Contribución
 
 Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request en GitHub para discutir cualquier cambio.
