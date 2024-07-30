@@ -63,7 +63,7 @@ webscraping_SergioSierra/
 
 ## Configuración
 
-1. **Instalar Dependencias**
+**Instalar Dependencias**
 
    Crea un entorno virtual y activa:
 
@@ -112,6 +112,6 @@ webscraping_SergioSierra/
 
 ## Contribución
 
-Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request en GitHub para discutir cualquier cambio.
+Las contribuciones son bienvenidas. Abre un issue o envía un pull request en GitHub para discutir cualquier cambio. ¡Gracias!
 
 
