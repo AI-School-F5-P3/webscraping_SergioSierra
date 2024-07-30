@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraSearch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</head>
+<body>
+    <header>
+        <h1>FraSearch</h1>
+    </header>
+    
+    <div class="search-form">
+        <form action="/" method="get">
+            <input type="text" name="search" placeholder="Buscar citas..." value="{{ search }}">
+            <input type="submit" value="Buscar">
+        </form>
+    </div>
+    
+    <main>
+        {% for quote in quotes %}
+            <article class="quote">
+                <p class="quote-text">"{{ quote.quote }}"</p>
+                <p class="quote-author">
+                    — {{ quote.author }}
+                    {% if quote.author_bio %}
+                        <button class="toggle-bio" onclick="toggleBio(this)">Ver Biografía</button>
+                    {% endif %}
+                </p>
+                <p class="quote-tags">Tags: {{ quote.tags }}</p>
+                {% if quote.author_bio %}
+                    <p class="quote-author-bio" style="display: none;">{{ quote.author_bio }}</p>
+                {% endif %}
+            </article>
+        {% endfor %}
+    </main>
+
+    <div class="pagination">
+        {% if page > 1 %}
+            <a href="?page={{ page - 1 }}{% if search %}&search={{ search }}{% endif %}">&laquo; Página Anterior</a>
+        {% endif %}
+        <span>Página {{ page }}</span>
+        {% if quotes|length == page_size %}
+            <a href="?page={{ page + 1 }}{% if search %}&search={{ search }}{% endif %}">Página Siguiente &raquo;</a>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>&copy; 2024 FraSearch. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,7 @@
+requests
+beautifulsoup4
+sqlalchemy
+psycopg2-binary  # Para PostgreSQL
+Flask
+python-dotenv
+tenacity
