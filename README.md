@@ -2,8 +2,7 @@
 ---
 
 # Web Scraping Project - Sergio Sierra
-
-Este proyecto realiza web scraping para extraer citas de la web [Quotes to Scrape](http://quotes.toscrape.com) y almacena los datos en una base de datos PostgreSQL. Incluye un frontend básico para visualizar las citas, todo dockerizado para facilitar el despliegue.
+Este proyecto es una aplicación de web scraping que extrae citas de la web [Quotes to Scrape](http://quotes.toscrape.com). Utiliza `BeautifulSoup` para el scraping, `SQLAlchemy` para la gestión de la base de datos y `Flask` para el frontend. Los datos extraídos se almacenan en una base de datos PostgreSQL.
 
 ## Contenidos
 
